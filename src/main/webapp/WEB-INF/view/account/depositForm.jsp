@@ -5,7 +5,7 @@
         <hr />
         <form action="/account/deposit" method="post">
             <input type="text" name="amount" placeholder="Enter 입금금액" /><br />
-            <input type="text" name="wAccountNumber" placeholder="Enter 입금계좌" /><br />
+            <input type="text" name="dAccountNumber" placeholder="Enter 입금계좌" /><br />
             <button>입금</button>
         </form>
         </body>
