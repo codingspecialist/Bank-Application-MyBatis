@@ -27,10 +27,9 @@
             ht.amount, 
             nvl(wat.number, 'ATM') sender, 
             nvl(dat.number, 'ATM') receiver,
-            case when ht.w_balance is null then ht.d_balance  
-                when ht.d_balance is null then ht.w_balance  
-                else ht.w_balance 
-                end as balance,
+            case when wat.id = #{accountId} then ht.w_balance
+                 when dat.id = #{accountId} then ht.d_balance
+                 end as balance,
             ht.created_at
             FROM history_tb ht
             LEFT OUTER JOIN account_tb wat
