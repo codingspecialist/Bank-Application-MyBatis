@@ -27,8 +27,8 @@
             ht.amount, 
             nvl(wat.number, 'ATM') sender, 
             nvl(dat.number, 'ATM') receiver,
-            case when wat.id = #{accountId} then ht.w_balance
-                 when dat.id = #{accountId} then ht.d_balance
+            case when ht.w_account_id = #{accountId} then ht.w_balance
+                 when ht.d_account_id = #{accountId} then ht.d_balance
                  end as balance,
             ht.created_at
             FROM history_tb ht
