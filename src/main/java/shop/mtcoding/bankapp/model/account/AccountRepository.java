@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import shop.mtcoding.bankapp.dto.account.AccountDetailRespDto;
+
 @Mapper
 public interface AccountRepository {
+    public AccountDetailRespDto findByIdWithUser(int id);
+
     public int insert(Account account);
 
     public int updateById(Account account);

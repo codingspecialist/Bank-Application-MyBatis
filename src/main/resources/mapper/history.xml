@@ -4,7 +4,45 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="shop.mtcoding.bankapp.model.history.HistoryRepository">
-     <select id="findAll" resultType="shop.mtcoding.bankapp.model.history.History">
+     <select id="findByGubun" resultType="shop.mtcoding.bankapp.dto.history.HistoryRespDto">
+        <if test="gubun == 'withdraw'">
+            SELECT ht.id, ht.amount, ht.w_balance balance, wat.number sender, 'ATM' receiver, ht.created_at
+            FROM history_tb ht
+            INNER JOIN account_tb wat
+            ON ht.w_account_id = wat.id
+            WHERE ht.w_account_id = #{accountId}
+        </if>
+
+        <if test="gubun == 'deposit'">
+            SELECT ht.id, ht.amount, ht.d_balance balance, 'ATM' sender, dat.number receiver, ht.created_at
+            FROM history_tb ht
+            INNER JOIN account_tb dat
+            ON ht.d_account_id = dat.id
+            WHERE ht.d_account_id = #{accountId}
+        </if>
+
+        <if test="gubun == 'all'">
+            SELECT 
+            ht.id, 
+            ht.amount, 
+            nvl(wat.number, 'ATM') sender, 
+            nvl(dat.number, 'ATM') receiver,
+            case when ht.w_balance is null then ht.d_balance  
+                when ht.d_balance is null then ht.w_balance  
+                else ht.w_balance 
+                end as balance,
+            ht.created_at
+            FROM history_tb ht
+            LEFT OUTER JOIN account_tb wat
+            ON ht.w_account_id = wat.id
+            LEFT OUTER JOIN account_tb dat
+            ON ht.d_account_id = dat.id
+            WHERE ht.w_account_id = #{accountId} or ht.d_account_id = #{accountId};
+        </if>
+    </select>
+
+
+    <select id="findAll" resultType="shop.mtcoding.bankapp.model.history.History">
         select * from history_tb
     </select>
 

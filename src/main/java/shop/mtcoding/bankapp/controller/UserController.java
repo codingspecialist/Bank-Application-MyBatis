@@ -27,6 +27,12 @@ public class UserController {
     @Autowired
     private HttpSession session;
 
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/loginForm";
+    }
+
     // SELECT 요청이지만 로그인만 post로 한다. (예외임!!)
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
