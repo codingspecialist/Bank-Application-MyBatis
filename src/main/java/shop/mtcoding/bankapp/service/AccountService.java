@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.bankapp.dto.account.AccountDepositReqDto;
 import shop.mtcoding.bankapp.dto.account.AccountSaveReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountTransferReqDto;
 import shop.mtcoding.bankapp.dto.account.AccountWithdrawReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
@@ -80,7 +81,50 @@ public class AccountService {
         history.setDAccountId(accountPS.getId());
         history.setWBalance(null);
         history.setDBalance(accountPS.getBalance());
-
         historyRepository.insert(history);
     }
+
+    @Transactional
+    public int 이체하기(AccountTransferReqDto accountTransferReqDto, Integer principalId) {
+        // 1. 출금 계좌존재 여부
+        Account wAccountPS = accountRepository.findByNumber(accountTransferReqDto.getWAccountNumber());
+        if (wAccountPS == null) {
+            throw new CustomException("출금 계좌가 없는데?", HttpStatus.BAD_REQUEST);
+        }
+        // 2. 입금 계좌존재 여부
+        Account dAccountPS = accountRepository.findByNumber(accountTransferReqDto.getDAccountNumber());
+        if (dAccountPS == null) {
+            throw new CustomException("입금 계좌가 없는데?", HttpStatus.BAD_REQUEST);
+        }
+
+        // 3. 출금 계좌패스워드 확인
+        wAccountPS.checkPassword(accountTransferReqDto.getWAccountPassword());
+
+        // 4. 출금 잔액확인
+        wAccountPS.checkBalance(accountTransferReqDto.getAmount());
+
+        // 5. 출금계좌 소유주 확인 (로그인 한 사람)
+        wAccountPS.checkOwner(principalId);
+
+        // 6. 출금
+        wAccountPS.withdraw(accountTransferReqDto.getAmount());
+        accountRepository.updateById(wAccountPS);
+
+        // 7. 입금
+        dAccountPS.deposit(accountTransferReqDto.getAmount());
+        accountRepository.updateById(dAccountPS);
+
+        // 8. 히스토리 (거래내역)
+        History history = new History();
+        history.setAmount(accountTransferReqDto.getAmount());
+        history.setWAccountId(wAccountPS.getId());
+        history.setDAccountId(dAccountPS.getId());
+        history.setWBalance(wAccountPS.getBalance());
+        history.setDBalance(dAccountPS.getBalance());
+        historyRepository.insert(history);
+
+        // 9. 해당 계좌의 id를
+        return wAccountPS.getId();
+    } // 서비스 메서드 종료시에 커밋됩니다. 서비스 실행하다가 예외터지면 롤백
+
 }

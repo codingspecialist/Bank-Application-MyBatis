@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface HistoryRepository {
+
     public int insert(History history);
 
     public int updateById(History history);
