@@ -66,6 +66,34 @@ jacocoTestCoverageVerification {
 ### 5. 커버리지 보고서 생성 (test.exec 파일이 생성된 뒤 터미널에서 실행)
 ./gradlew jacocoTestReport
 
+```text
+counter
+BRANCH : 조건문 등의 분기 수
+
+CLASS : 클래스 수, 내부 메서드가 한 번이라도 실행된다면 실행된 것으로 간주한다.
+
+COMPLEXITY : 복잡도
+
+INSTRUCTION : Java 바이트코드 명령 수
+
+METHOD : 메서드 수, 메서드가 한 번이라도 실행된다면 실행된 것으로 간주한다.
+
+LINE : 빈 줄을 제외한 실제 코드의 라인 수, 라인이 한 번이라도 실행되면 실행된 것으로 간주한다.
+```
+
+```text
+value
+COVEREDCOUNT : 커버된 개수
+
+COVEREDRATIO : 커버된 비율, 0부터 1사이의 숫자로 1이 100%이다.
+
+MISSEDCOUNT : 커버되지 않은 개수
+
+MISSEDRATIO : 커버되지 않은 비율, 0부터 1사이의 숫자로 1이 100%이다.
+
+TOTALCOUNT : 전체 개수
+```
+
 ### 6. 생성된 보고서 확인
 - /build/jacoco
 - index.html
