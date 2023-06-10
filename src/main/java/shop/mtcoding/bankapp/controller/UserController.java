@@ -36,6 +36,9 @@ public class UserController {
     // SELECT 요청이지만 로그인만 post로 한다. (예외임!!)
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
+        System.out.println("실서버");
+        System.out.println(loginReqDto.getUsername());
+        System.out.println(loginReqDto.getPassword());
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
         }
