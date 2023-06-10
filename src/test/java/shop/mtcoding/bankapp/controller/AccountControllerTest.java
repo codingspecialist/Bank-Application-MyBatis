@@ -16,11 +16,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import shop.mtcoding.bankapp.model.account.AccountRepository;
 import shop.mtcoding.bankapp.model.history.HistoryRepository;
 import shop.mtcoding.bankapp.model.user.User;
-import shop.mtcoding.bankapp.model.user.UserRepository;
 import shop.mtcoding.bankapp.service.AccountService;
-import shop.mtcoding.bankapp.service.UserService;
+import shop.mtcoding.bankapp.service.AccountServiceTest;
 
-import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
